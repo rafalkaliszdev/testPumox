@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using testPumox.Domain;
@@ -14,19 +15,9 @@ namespace testPumox.Persistence
             _dbContext = dbContext;
         }
 
-        public bool ExistsById(long id)
-        {
-            return _dbContext.Set<TEntity>().Any(p => p.Id == id);
-        }
-
         public virtual TEntity GetById(long id)
         {
             return _dbContext.Set<TEntity>().Find(id);
-        }
-
-        public IReadOnlyCollection<TEntity> ListAll()
-        {
-            return _dbContext.Set<TEntity>().ToList();
         }
 
         public TEntity Add(TEntity entity)
@@ -42,10 +33,18 @@ namespace testPumox.Persistence
             _dbContext.SaveChanges();
         }
 
-        public void Delete(TEntity entity)
+        public void DeleteCompany(long id)
         {
-            _dbContext.Set<TEntity>().Remove(entity);
+            // No need to retrieve record from db.
+            var company = Activator.CreateInstance<Company>();
+            company.Id = id;
+            _dbContext.Company.Attach(company);
+            _dbContext.Company.Remove(company);
             _dbContext.SaveChanges();
+
+            // Previous approach.
+            //_dbContext.Set<TEntity>().Remove(entity);
+            //_dbContext.SaveChanges();
         }
     }
 }

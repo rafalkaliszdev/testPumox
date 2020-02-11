@@ -33,6 +33,8 @@ namespace testPumox
                 options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             });
 
+            / lecê ka¿dy plik, zaczynaj¹c od startup.cs w górê - i wypisuje to do tamtych 3 plikow
+
             services.AddMvc(mvcOptions =>
             {
                 mvcOptions.EnableEndpointRouting = false;
